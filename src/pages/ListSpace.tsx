@@ -1,18 +1,13 @@
 
 import React, { useState } from 'react';
-import { Upload, Car, Home, Building2, Calendar, MapPin, DollarSign } from 'lucide-react';
+import { Upload, Car, Home, Building2, Calendar, MapPin, DollarSign, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
+import { toast } from '@/components/ui/use-toast';
 
 const ListSpace = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -22,7 +17,8 @@ const ListSpace = () => {
     description: '',
     location: '',
     price: '',
-    photos: [] as File[]
+    photos: [] as File[],
+    availableDates: [] as Date[]
   });
 
   const spaceTypes = [
@@ -30,12 +26,52 @@ const ListSpace = () => {
     { value: 'garage', label: 'Garage', icon: Building2 },
     { value: 'room', label: 'Room', icon: Home },
     { value: 'storage', label: 'Storage Unit', icon: Building2 },
-    { value: 'event', label: 'Event Space', icon: Building2 }
+    { value: 'event', label: 'Event Space', icon: Building2 },
+    { value: 'other', label: 'Other', icon: MoreHorizontal }
   ];
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     setFormData(prev => ({ ...prev, photos: [...prev.photos, ...files] }));
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (!date) return;
+    
+    setFormData(prev => {
+      const isAlreadySelected = prev.availableDates.some(
+        selectedDate => selectedDate.toDateString() === date.toDateString()
+      );
+
+      if (isAlreadySelected) {
+        return {
+          ...prev,
+          availableDates: prev.availableDates.filter(
+            selectedDate => selectedDate.toDateString() !== date.toDateString()
+          )
+        };
+      } else {
+        return {
+          ...prev,
+          availableDates: [...prev.availableDates, date]
+        };
+      }
+    });
+  };
+
+  const canProceed = () => {
+    switch (currentStep) {
+      case 1:
+        return formData.spaceType !== '';
+      case 2:
+        return formData.photos.length > 0;
+      case 3:
+        return formData.title && formData.location && formData.description && formData.price;
+      case 4:
+        return formData.availableDates.length > 0;
+      default:
+        return false;
+    }
   };
 
   const handleNext = () => {
@@ -48,6 +84,41 @@ const ListSpace = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const handlePublish = () => {
+    // Save to localStorage for demo purposes
+    const existingListings = JSON.parse(localStorage.getItem('myListings') || '[]');
+    const newListing = {
+      id: Date.now().toString(),
+      ...formData,
+      createdAt: new Date().toISOString(),
+      rating: (4 + Math.random()).toFixed(1),
+      reviewCount: Math.floor(Math.random() * 100) + 1,
+      totalEarnings: 0,
+      image: formData.photos.length > 0 ? URL.createObjectURL(formData.photos[0]) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop'
+    };
+    
+    existingListings.push(newListing);
+    localStorage.setItem('myListings', JSON.stringify(existingListings));
+    
+    toast({
+      title: "Listing Published!",
+      description: "Your space has been successfully listed and is now live.",
+    });
+
+    // Reset form and redirect to my listings
+    setFormData({
+      spaceType: '',
+      title: '',
+      description: '',
+      location: '',
+      price: '',
+      photos: [],
+      availableDates: []
+    });
+    setCurrentStep(1);
+    window.location.href = '/my-listings';
   };
 
   return (
@@ -125,8 +196,12 @@ const ListSpace = () => {
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {formData.photos.map((file, index) => (
-                      <div key={index} className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                        <span className="text-xs text-gray-500">{file.name}</span>
+                      <div key={index} className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     ))}
                   </div>
@@ -198,11 +273,43 @@ const ListSpace = () => {
           {currentStep === 4 && (
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Set your availability</h2>
-              <div className="border border-gray-200 rounded-lg p-4">
-                <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-4" />
-                <p className="text-center text-gray-600">Calendar component would go here</p>
-                <p className="text-center text-sm text-gray-500 mt-2">Select the dates when your space is available</p>
+              <p className="text-gray-600 mb-4">Select the dates when your space is available for rent</p>
+              
+              <div className="flex justify-center">
+                <CalendarComponent
+                  mode="single"
+                  selected={undefined}
+                  onSelect={handleDateSelect}
+                  className="rounded-md border p-3 pointer-events-auto"
+                  modifiers={{
+                    selected: formData.availableDates
+                  }}
+                  modifiersStyles={{
+                    selected: {
+                      backgroundColor: '#3b82f6',
+                      color: 'white'
+                    }
+                  }}
+                />
               </div>
+
+              {formData.availableDates.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Selected dates ({formData.availableDates.length}):
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {formData.availableDates.map((date, index) => (
+                      <span
+                        key={index}
+                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm"
+                      >
+                        {date.toLocaleDateString()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -216,13 +323,23 @@ const ListSpace = () => {
               Back
             </Button>
             
-            <Button
-              onClick={handleNext}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={currentStep === 4}
-            >
-              {currentStep === 4 ? 'Publish Listing' : 'Next'}
-            </Button>
+            {currentStep === 4 ? (
+              <Button
+                onClick={handlePublish}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={!canProceed()}
+              >
+                Publish Listing
+              </Button>
+            ) : (
+              <Button
+                onClick={handleNext}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={!canProceed()}
+              >
+                Next
+              </Button>
+            )}
           </div>
         </div>
       </div>
