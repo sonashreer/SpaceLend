@@ -18,11 +18,11 @@ const Explore = () => {
   const [searchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('location') || '');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
-  const [priceFilter, setPriceFilter] = useState('');
-  const [spaceTypeFilter, setSpaceTypeFilter] = useState('');
-  const [distanceFilter, setDistanceFilter] = useState('');
-  const [ratingFilter, setRatingFilter] = useState('');
-  const [availabilityFilter, setAvailabilityFilter] = useState('');
+  const [priceFilter, setPriceFilter] = useState('all');
+  const [spaceTypeFilter, setSpaceTypeFilter] = useState('all');
+  const [distanceFilter, setDistanceFilter] = useState('all');
+  const [ratingFilter, setRatingFilter] = useState('all');
+  const [availabilityFilter, setAvailabilityFilter] = useState('all');
   const [sortBy, setSortBy] = useState('relevance');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -170,17 +170,17 @@ const Explore = () => {
   };
 
   const filteredResults = searchResults.filter(space => {
-    const matchesType = !spaceTypeFilter || space.type === spaceTypeFilter;
-    const matchesPrice = !priceFilter || 
+    const matchesType = spaceTypeFilter === 'all' || space.type === spaceTypeFilter;
+    const matchesPrice = priceFilter === 'all' || 
       (priceFilter === '0-25' && space.price <= 25) ||
       (priceFilter === '25-50' && space.price > 25 && space.price <= 50) ||
       (priceFilter === '50-100' && space.price > 50 && space.price <= 100) ||
       (priceFilter === '100+' && space.price > 100);
-    const matchesDistance = !distanceFilter ||
+    const matchesDistance = distanceFilter === 'all' ||
       (distanceFilter === '1' && parseFloat(space.distance) <= 1) ||
       (distanceFilter === '5' && parseFloat(space.distance) <= 5) ||
       (distanceFilter === '10' && parseFloat(space.distance) <= 10);
-    const matchesRating = !ratingFilter ||
+    const matchesRating = ratingFilter === 'all' ||
       (ratingFilter === '4' && space.rating >= 4) ||
       (ratingFilter === '4.5' && space.rating >= 4.5);
     
@@ -255,7 +255,7 @@ const Explore = () => {
                   <SelectValue placeholder="Space Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="">Show All Listings</SelectItem>
+                  <SelectItem value="all">Show All Listings</SelectItem>
                   <SelectItem value="driveway">Driveway</SelectItem>
                   <SelectItem value="garage">Garage</SelectItem>
                   <SelectItem value="room">Room</SelectItem>
@@ -270,7 +270,7 @@ const Explore = () => {
                   <SelectValue placeholder="Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="">Show All Listings</SelectItem>
+                  <SelectItem value="all">Show All Listings</SelectItem>
                   <SelectItem value="0-25">$0 - $25</SelectItem>
                   <SelectItem value="25-50">$25 - $50</SelectItem>
                   <SelectItem value="50-100">$50 - $100</SelectItem>
@@ -278,17 +278,18 @@ const Explore = () => {
                 </SelectContent>
               </Select>
 
-              <Select>
+              <Select value={distanceFilter} onValueChange={setDistanceFilter}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="More Filters" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="distance-1" onSelect={() => setDistanceFilter('1')}>Within 1 mile</SelectItem>
-                  <SelectItem value="distance-5" onSelect={() => setDistanceFilter('5')}>Within 5 miles</SelectItem>
-                  <SelectItem value="distance-10" onSelect={() => setDistanceFilter('10')}>Within 10 miles</SelectItem>
-                  <SelectItem value="rating-4" onSelect={() => setRatingFilter('4')}>4+ Rating</SelectItem>
-                  <SelectItem value="rating-45" onSelect={() => setRatingFilter('4.5')}>4.5+ Rating</SelectItem>
-                  <SelectItem value="available-only" onSelect={() => setAvailabilityFilter('available')}>Only Available</SelectItem>
+                  <SelectItem value="all">Show All Listings</SelectItem>
+                  <SelectItem value="1">Within 1 mile</SelectItem>
+                  <SelectItem value="5">Within 5 miles</SelectItem>
+                  <SelectItem value="10">Within 10 miles</SelectItem>
+                  <SelectItem value="4" onSelect={() => setRatingFilter('4')}>4+ Rating</SelectItem>
+                  <SelectItem value="4.5" onSelect={() => setRatingFilter('4.5')}>4.5+ Rating</SelectItem>
+                  <SelectItem value="available" onSelect={() => setAvailabilityFilter('available')}>Only Available</SelectItem>
                 </SelectContent>
               </Select>
             </div>
