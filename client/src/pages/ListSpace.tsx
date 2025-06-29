@@ -9,6 +9,7 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
 import { toast } from '@/components/ui/use-toast';
 import { useLocation } from 'wouter';
+import type { DateRange } from 'react-day-picker';
 
 const ListSpace = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -19,7 +20,7 @@ const ListSpace = () => {
     location: '',
     price: '',
     photos: [] as File[],
-    availableDates: {from: undefined, to: undefined} as {from: Date | undefined, to: Date | undefined}
+    availableDates: undefined as DateRange | undefined
   });
   const [, setLocation] = useLocation();
 
@@ -40,10 +41,10 @@ const ListSpace = () => {
     }
   };
 
-  const handleDateSelect = (range: {from: Date | undefined, to: Date | undefined} | undefined) => {
+  const handleDateSelect = (range: DateRange | undefined) => {
     setFormData(prev => ({
       ...prev,
-      availableDates: range || {from: undefined, to: undefined}
+      availableDates: range
     }));
   };
 
@@ -56,7 +57,7 @@ const ListSpace = () => {
       case 3:
         return formData.title && formData.location && formData.description && formData.price;
       case 4:
-        return formData.availableDates.from !== undefined;
+        return formData.availableDates?.from !== undefined;
       default:
         return false;
     }
@@ -268,7 +269,7 @@ const ListSpace = () => {
                 />
               </div>
 
-              {formData.availableDates.from && (
+              {formData.availableDates?.from && formData.availableDates && (
                 <div className="mt-4 p-4 bg-blue-50 rounded-lg">
                   <p className="text-sm text-blue-800">
                     <strong>Selected availability:</strong>

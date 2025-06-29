@@ -7,13 +7,15 @@ import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
 import ReviewCard from '@/components/ReviewCard';
 import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/contexts/AuthContext';
+import type { DateRange } from 'react-day-picker';
 
 const SpaceDetail = () => {
   const { id } = useParams();
   const [, setLocation] = useLocation();
-  const [selectedDates, setSelectedDates] = useState<{from: Date | undefined, to: Date | undefined}>({from: undefined, to: undefined});
+  const [selectedDates, setSelectedDates] = useState<DateRange | undefined>();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, login, logout, userAvatar, userEmail } = useAuth();
 
   // Blocked dates for demo
   const blockedDates = [
@@ -24,10 +26,7 @@ const SpaceDetail = () => {
     new Date(2025, 0, 8),   // Jan 8
   ];
 
-  React.useEffect(() => {
-    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-  }, []);
+
 
   // Mock space data - updated for "Private Parking Spot in Downtown"
   const space = {
@@ -86,30 +85,38 @@ const SpaceDetail = () => {
   ];
 
   const handleLogin = (email: string, password: string) => {
-    setIsLoggedIn(true);
+    login(email, password);
     setIsAuthModalOpen(false);
-    localStorage.setItem('userLoggedIn', 'true');
-    localStorage.setItem('userEmail', 'sophia.carter@example.com');
-    localStorage.setItem('userName', 'Sophia Carter');
   };
 
   const handleBooking = () => {
     if (!isLoggedIn) {
       setIsAuthModalOpen(true);
-    } else if (selectedDates.from) {
+    } else if (selectedDates?.from) {
       const startDate = selectedDates.from.toISOString().split('T')[0];
       const endDate = selectedDates.to ? selectedDates.to.toISOString().split('T')[0] : startDate;
       const days = selectedDates.to ? 
         Math.ceil((selectedDates.to.getTime() - selectedDates.from.getTime()) / (1000 * 60 * 60 * 24)) + 1 : 1;
       
-      setLocation(`/booking/${space.id}`);
+      // Pass booking data via URL search parameters
+      const bookingParams = new URLSearchParams({
+        startDate,
+        endDate,
+        days: days.toString(),
+        price: space.price.toString(),
+        title: space.title,
+        location: space.location,
+        image: space.images[0] // Use first image from the images array
+      });
+      
+      setLocation(`/booking/${space.id}?${bookingParams.toString()}`);
     } else {
       alert('Please select a date first');
     }
   };
 
-  const handleDateSelect = (range: {from: Date | undefined, to: Date | undefined} | undefined) => {
-    setSelectedDates(range || {from: undefined, to: undefined});
+  const handleDateSelect = (range: DateRange | undefined) => {
+    setSelectedDates(range);
   };
 
   const isDateBlocked = (date: Date) => {
@@ -119,10 +126,10 @@ const SpaceDetail = () => {
   };
 
   const getDayCount = () => {
-    if (selectedDates.from && selectedDates.to) {
+    if (selectedDates?.from && selectedDates?.to) {
       return Math.ceil((selectedDates.to.getTime() - selectedDates.from.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     }
-    return selectedDates.from ? 1 : 0;
+    return selectedDates?.from ? 1 : 0;
   };
 
   return (
@@ -130,13 +137,9 @@ const SpaceDetail = () => {
       <Header 
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
-        onLogout={() => {
-          setIsLoggedIn(false);
-          localStorage.removeItem('userLoggedIn');
-          localStorage.removeItem('userEmail');
-          localStorage.removeItem('userName');
-        }}
-        userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
+        onLogout={logout}
+        userAvatar={isLoggedIn ? userAvatar : undefined}
+        userEmail={userEmail}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -311,11 +314,11 @@ const SpaceDetail = () => {
                     }}
                   />
                 </div>
-                {selectedDates.from && (
+                {selectedDates?.from && (
                   <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">
                       <strong>Selected:</strong> {selectedDates.from.toLocaleDateString()}
-                      {selectedDates.to && selectedDates.to !== selectedDates.from && 
+                      {selectedDates?.to && selectedDates.to !== selectedDates.from && 
                         ` - ${selectedDates.to.toLocaleDateString()}`
                       }
                     </p>
@@ -329,7 +332,7 @@ const SpaceDetail = () => {
               <Button 
                 onClick={handleBooking}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-lg font-semibold"
-                disabled={!selectedDates.from}
+                disabled={!selectedDates?.from}
               >
                 Book Now
               </Button>

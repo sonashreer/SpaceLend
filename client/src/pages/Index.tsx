@@ -42,15 +42,20 @@ const Index = () => {
       />
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-16 pb-20">
+      <section 
+        className="relative bg-cover bg-center bg-no-repeat pt-16 pb-20"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('@assets/Background image_1751175920784.png')`
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Rent unused spaces,<br />
-              <span className="text-blue-600">earn extra income</span>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              Rent the perfect space.<br />
+              <span className="text-blue-300">Earn from yours.</span>
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-              Transform your empty garage, parking spot, or storage area into a profitable rental space. Join thousands earning passive income.
+            <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
+              Connect space owners with renters. From parking spots to event venues, find what you need or monetize what you have.
             </p>
             
             {/* Search Bar */}

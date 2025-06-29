@@ -13,6 +13,7 @@ import {
 import Header from '@/components/layout/Header';
 import SpaceCard from '@/components/SpaceCard';
 import { useLocation } from 'wouter';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Explore = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +26,7 @@ const Explore = () => {
   const [sortBy, setSortBy] = useState('relevance');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, userAvatar, userEmail, logout } = useAuth();
 
   // Extended mock listings - 10 total
   const mockListings = [
@@ -125,7 +126,7 @@ const Explore = () => {
       rating: 4.3,
       reviewCount: 92,
       distance: '5.1 miles',
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      image: '@assets/pexels-julia-kuzenkov-442028-1974596_1751176604809.jpg',
       type: 'driveway'
     },
     {
@@ -145,9 +146,6 @@ const Explore = () => {
   useEffect(() => {
     setSearchResults(mockListings);
     setHasSearched(true);
-    
-    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
   }, []);
 
   const handleSearch = () => {
@@ -211,19 +209,15 @@ const Explore = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('userLoggedIn');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
+    logout();
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
         isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
-        userEmail={isLoggedIn ? 'sophia.carter@example.com' : undefined}
-        userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
+        userEmail={userEmail}
+        userAvatar={isLoggedIn ? userAvatar : undefined}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

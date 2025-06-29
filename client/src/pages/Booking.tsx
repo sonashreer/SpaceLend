@@ -25,18 +25,19 @@ const Booking = () => {
     billingAddress: ''
   });
 
-  // Get booking details from URL params - simplified for demo
-  const startDate = new Date().toISOString().split('T')[0];
-  const endDate = new Date(Date.now() + 86400000).toISOString().split('T')[0];
-  const totalDays = '1';
-  const pricePerDay = 25;
+  // Get booking details from URL params
+  const urlParams = new URLSearchParams(window.location.search);
+  const startDate = urlParams.get('startDate') || new Date().toISOString().split('T')[0];
+  const endDate = urlParams.get('endDate') || new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const totalDays = urlParams.get('days') || '1';
+  const pricePerDay = parseInt(urlParams.get('price') || '25');
   const totalPrice = parseInt(totalDays) * pricePerDay;
 
   const space = {
-    title: 'Private Parking Spot in Downtown',
-    location: '456 Oak Ave, West Hollywood, CA',
+    title: urlParams.get('title') || 'Private Parking Spot in Downtown',
+    location: urlParams.get('location') || '456 Oak Ave, West Hollywood, CA',
     price: pricePerDay,
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop'
+    image: urlParams.get('image') || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop'
   };
 
   const handleCompleteBooking = () => {
