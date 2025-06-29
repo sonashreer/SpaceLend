@@ -2,7 +2,7 @@
 import React from 'react';
 import { Star, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 
 interface SpaceCardProps {
   id: string;
