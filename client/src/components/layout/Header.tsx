@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'wouter';
 import { Globe, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,8 +20,7 @@ interface HeaderProps {
 }
 
 const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace, userEmail }: HeaderProps) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const [location] = useLocation();
 
   // Sophia Carter's avatar - updated profile pic
   const defaultAvatar = "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png";

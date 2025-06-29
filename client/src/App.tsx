@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Route, Switch } from "wouter";
 import Index from "./pages/Index";
 import ListSpace from "./pages/ListSpace";
 import Explore from "./pages/Explore";
@@ -24,23 +24,20 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/list-space" element={<ListSpace />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/space/:id" element={<SpaceDetail />} />
-          <Route path="/booking/:id" element={<Booking />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-          <Route path="/my-listings" element={<MyListings />} />
-          <Route path="/messages" element={<Messages />} />
-          <Route path="/earnings" element={<Earnings />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <Switch>
+        <Route path="/" component={Index} />
+        <Route path="/list-space" component={ListSpace} />
+        <Route path="/explore" component={Explore} />
+        <Route path="/space/:id" component={SpaceDetail} />
+        <Route path="/booking/:id" component={Booking} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/my-bookings" component={MyBookings} />
+        <Route path="/my-listings" component={MyListings} />
+        <Route path="/messages" component={Messages} />
+        <Route path="/earnings" component={Earnings} />
+        <Route path="/settings" component={Settings} />
+        <Route component={NotFound} />
+      </Switch>
     </TooltipProvider>
   </QueryClientProvider>
 );

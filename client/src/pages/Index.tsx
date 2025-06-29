@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import { Search, ArrowRight, Star, Shield, Clock, DollarSign, MapPin, Users, CheckCircle, MessageCircle, Calendar, Phone, Mail, MapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'wouter';
 import Header from '@/components/layout/Header';
 import AuthModal from '@/components/AuthModal';
 
 const Index = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -23,7 +23,7 @@ const Index = () => {
 
   const handleListSpace = () => {
     if (isLoggedIn) {
-      navigate('/list-space');
+      setLocation('/list-space');
     } else {
       setIsAuthModalOpen(true);
     }

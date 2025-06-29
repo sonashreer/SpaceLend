@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import { CreditCard, Wallet, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,8 +11,7 @@ import { toast } from '@/components/ui/use-toast';
 
 const Booking = () => {
   const { id } = useParams();
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [bookingComplete, setBookingComplete] = useState(false);
   const [paymentType, setPaymentType] = useState('credit-card');
@@ -26,10 +25,10 @@ const Booking = () => {
     billingAddress: ''
   });
 
-  // Get booking details from URL params
-  const startDate = searchParams.get('startDate');
-  const endDate = searchParams.get('endDate');
-  const totalDays = searchParams.get('days') || '1';
+  // Get booking details from URL params - simplified for demo
+  const startDate = new Date().toISOString().split('T')[0];
+  const endDate = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+  const totalDays = '1';
   const pricePerDay = 25;
   const totalPrice = parseInt(totalDays) * pricePerDay;
 
@@ -72,7 +71,7 @@ const Booking = () => {
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Booking Successful!</h1>
             <p className="text-gray-600 mb-2">Your booking has been confirmed.</p>
             <p className="text-gray-600 mb-8">A confirmation email has been sent to {formData.email}</p>
-            <Button onClick={() => navigate('/my-bookings')}>
+            <Button onClick={() => setLocation('/my-bookings')}>
               View My Bookings
             </Button>
           </div>

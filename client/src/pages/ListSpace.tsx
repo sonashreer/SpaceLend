@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
 import { toast } from '@/components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 const ListSpace = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -21,7 +21,7 @@ const ListSpace = () => {
     photos: [] as File[],
     availableDates: {from: undefined, to: undefined} as {from: Date | undefined, to: Date | undefined}
   });
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
 
   const spaceTypes = [
     { value: 'driveway', label: 'Driveway', icon: Car },
@@ -96,7 +96,7 @@ const ListSpace = () => {
     });
 
     // Navigate to my listings page
-    navigate('/my-listings');
+    setLocation('/my-listings');
   };
 
   return (

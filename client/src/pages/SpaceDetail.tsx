@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useLocation } from 'wouter';
 import { Star, MapPin, Calendar, User, Wifi, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
@@ -10,7 +10,7 @@ import AuthModal from '@/components/AuthModal';
 
 const SpaceDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const [, setLocation] = useLocation();
   const [selectedDates, setSelectedDates] = useState<{from: Date | undefined, to: Date | undefined}>({from: undefined, to: undefined});
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -102,7 +102,7 @@ const SpaceDetail = () => {
       const days = selectedDates.to ? 
         Math.ceil((selectedDates.to.getTime() - selectedDates.from.getTime()) / (1000 * 60 * 60 * 24)) + 1 : 1;
       
-      navigate(`/booking/${space.id}?startDate=${startDate}&endDate=${endDate}&days=${days}`);
+      setLocation(`/booking/${space.id}`);
     } else {
       alert('Please select a date first');
     }

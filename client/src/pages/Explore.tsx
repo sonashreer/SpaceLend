@@ -12,11 +12,10 @@ import {
 } from '@/components/ui/select';
 import Header from '@/components/layout/Header';
 import SpaceCard from '@/components/SpaceCard';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 const Explore = () => {
-  const [searchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('location') || '');
+  const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [priceFilter, setPriceFilter] = useState('all');
   const [spaceTypeFilter, setSpaceTypeFilter] = useState('all');
