@@ -68,10 +68,7 @@ const Dashboard = () => {
       />
       
       <div className="flex">
-        <Sidebar 
-          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
-          userName="Sophia Carter"
-        />
+        <Sidebar />
         
         <div className="flex-1 p-8">
           <div className="mb-8">

@@ -16,7 +16,7 @@ interface HeaderProps {
   onLogout?: () => void;
   userAvatar?: string;
   onListSpace?: () => void;
-  userEmail?: string;
+  userEmail?: string | null;
 }
 
 const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace, userEmail }: HeaderProps) => {

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'wouter';
 import { 
   Home, 
   List, 
@@ -9,6 +9,7 @@ import {
   Settings,
   Calendar
 } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const sidebarItems = [
   { icon: Home, label: 'Dashboard', path: '/dashboard' },
@@ -19,14 +20,9 @@ const sidebarItems = [
   { icon: Settings, label: 'Settings', path: '/settings' },
 ];
 
-interface SidebarProps {
-  userAvatar?: string;
-  userName?: string;
-}
-
-const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
-  const location = useLocation();
-  const defaultAvatar = "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png";
+const Sidebar = () => {
+  const [location] = useLocation();
+  const { userAvatar, userName } = useAuth();
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
@@ -34,7 +30,7 @@ const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
           <img
-            src={userAvatar || defaultAvatar}
+            src={userAvatar}
             alt="Profile"
             className="w-10 h-10 rounded-full object-cover"
           />
@@ -49,7 +45,7 @@ const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
         <ul className="space-y-2 px-4">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path;
+            const isActive = location === item.path;
             
             return (
               <li key={item.path}>

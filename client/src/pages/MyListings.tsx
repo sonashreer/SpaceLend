@@ -130,10 +130,7 @@ const MyListings = () => {
       />
       
       <div className="flex">
-        <Sidebar 
-          userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
-          userName="Sophia Carter"
-        />
+        <Sidebar />
         
         <div className="flex-1 p-8">
           <div className="flex items-center justify-between mb-8">

@@ -5,17 +5,19 @@ import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 const MyBookings = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const { isLoggedIn, login, logout, userAvatar, userEmail } = useAuth();
 
   const handleLogin = (email: string, password: string) => {
-    setIsLoggedIn(true);
+    login(email, password);
+    setIsAuthModalOpen(false);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
   };
 
   // Fake bookings data with 5 completed bookings and 1 confirmed
@@ -111,14 +113,12 @@ const MyBookings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
+        userAvatar={isLoggedIn ? userAvatar : undefined}
+        userEmail={userEmail}
       />
       
       <div className="flex">
-        <Sidebar 
-          userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
-          userName="Sophia Carter"
-        />
+        <Sidebar />
         
         <div className="flex-1 p-8">
           <div className="mb-8">

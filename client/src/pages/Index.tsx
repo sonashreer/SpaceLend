@@ -6,19 +6,20 @@ import { Input } from '@/components/ui/input';
 import { Link, useLocation } from 'wouter';
 import Header from '@/components/layout/Header';
 import AuthModal from '@/components/AuthModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [, setLocation] = useLocation();
+  const { isLoggedIn, login, logout, userAvatar, userEmail } = useAuth();
 
   const handleLogin = (email: string, password: string) => {
-    setIsLoggedIn(true);
+    login(email, password);
     setIsAuthModalOpen(false);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    logout();
   };
 
   const handleListSpace = () => {
@@ -36,7 +37,8 @@ const Index = () => {
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
         onListSpace={handleListSpace}
-        userAvatar={isLoggedIn ? "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png" : undefined}
+        userAvatar={isLoggedIn ? userAvatar : undefined}
+        userEmail={userEmail}
       />
 
       {/* Hero Section */}
