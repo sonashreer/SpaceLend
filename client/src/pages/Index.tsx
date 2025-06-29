@@ -45,7 +45,7 @@ const Index = () => {
       <section 
         className="relative bg-cover bg-center bg-no-repeat pt-16 pb-20"
         style={{
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/new-city-street-background.jpg')`,
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/city-street-background.jpg')`,
           backgroundAttachment: 'fixed'
         }}
       >
