@@ -3,33 +3,37 @@ import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Star, MapPin, Calendar, User, Wifi, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
 import ReviewCard from '@/components/ReviewCard';
+import AuthModal from '@/components/AuthModal';
 
 const SpaceDetail = () => {
   const { id } = useParams();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Mock space data
+  // Mock space data - updated for "Private Parking Spot in Downtown"
   const space = {
     id: id || '1',
     title: 'Private Parking Spot in Downtown',
-    location: '123 Elm Street, Downtown, CA',
+    location: '456 Oak Ave, West Hollywood, CA',
     price: 25,
-    rating: 4.8,
-    reviewCount: 120,
+    rating: 4.9,
+    reviewCount: 89,
     images: [
       'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=600&fit=crop',
       'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop'
     ],
-    description: 'Discover a secure and convenient parking solution in the heart of downtown. This private parking spot offers easy access to major attractions, business centers, and public transportation. Ideal for daily commuters or visitors, the space is well-lit, monitored, and easily accessible. Book now for a hassle-free parking experience!',
+    description: 'Secure private driveway parking spot in prime downtown location. Perfect for daily commuters or event parking. Easy access, well-lit area with 24/7 availability. Walking distance to restaurants, shops, and public transportation.',
     host: {
       name: 'Sarah',
-      avatar: '',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face',
       joinedDate: '2021',
       rating: 4.9
     },
-    amenities: ['24/7 Access', 'Security Camera', 'Well-lit'],
+    amenities: ['24/7 Access', 'Security Camera', 'Well-lit', 'Easy Access'],
     availability: {
       available: [5, 7, 15, 22, 28], // Mock available dates for current month
       booked: [3, 8, 14, 21]
@@ -42,7 +46,7 @@ const SpaceDetail = () => {
       date: 'May 15, 2024',
       rating: 5,
       comment: 'Great location and very secure. Easy to find and access. Will definitely use again!',
-      avatar: '',
+      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face',
       helpfulCount: 10,
       unhelpfulCount: 2
     },
@@ -51,7 +55,7 @@ const SpaceDetail = () => {
       date: 'April 22, 2024',
       rating: 4,
       comment: 'Good spot, but a bit tight for larger vehicles. Otherwise, it was perfect for my needs.',
-      avatar: '',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face',
       helpfulCount: 5,
       unhelpfulCount: 1
     },
@@ -60,20 +64,38 @@ const SpaceDetail = () => {
       date: 'March 10, 2024',
       rating: 5,
       comment: 'Excellent parking space! Clean, safe, and close to everything. Highly recommend.',
-      avatar: '',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face',
       helpfulCount: 12,
       unhelpfulCount: 0
     }
   ];
 
+  const handleLogin = (email: string, password: string) => {
+    setIsLoggedIn(true);
+    setIsAuthModalOpen(false);
+  };
+
   const handleBooking = () => {
-    console.log('Booking space:', space.id);
-    // Navigate to booking confirmation or payment
+    if (!isLoggedIn) {
+      setIsAuthModalOpen(true);
+    } else if (selectedDate) {
+      console.log('Booking space:', space.id, 'for date:', selectedDate);
+      // Navigate to booking confirmation or payment
+    } else {
+      alert('Please select a date first');
+    }
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setSelectedDate(date || null);
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <Header 
+        isLoggedIn={isLoggedIn}
+        onLogin={() => setIsAuthModalOpen(true)}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Image */}
@@ -111,9 +133,11 @@ const SpaceDetail = () => {
             <div className="border-t border-b border-gray-200 py-6 mb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">About the host</h2>
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-gray-600" />
-                </div>
+                <img 
+                  src={space.host.avatar}
+                  alt={space.host.name}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
                 <div>
                   <p className="font-medium text-gray-900">Hosted by {space.host.name}</p>
                   <p className="text-sm text-gray-600">Joined in {space.host.joinedDate}</p>
@@ -173,11 +197,11 @@ const SpaceDetail = () => {
                         <div className="flex-1 mx-3 bg-gray-200 rounded-full h-2">
                           <div 
                             className="bg-gray-800 h-2 rounded-full"
-                            style={{ width: rating === 5 ? '70%' : rating === 4 ? '20%' : '5%' }}
+                            style={{ width: rating === 5 ? '70%' : rating === 4 ? '25%' : '5%' }}
                           />
                         </div>
                         <span className="text-sm text-gray-600 w-8">
-                          {rating === 5 ? '70%' : rating === 4 ? '20%' : '5%'}
+                          {rating === 5 ? '70%' : rating === 4 ? '25%' : '5%'}
                         </span>
                       </div>
                     ))}
@@ -218,39 +242,28 @@ const SpaceDetail = () => {
                 </div>
               </div>
 
-              {/* Calendar */}
+              {/* Functional Calendar */}
               <div className="mb-6">
-                <h3 className="font-medium text-gray-900 mb-4">Availability</h3>
+                <h3 className="font-medium text-gray-900 mb-4">Select Date</h3>
                 <div className="border border-gray-200 rounded-lg p-4">
-                  <div className="text-center">
-                    <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">July 2024</p>
-                  </div>
-                  
-                  {/* Mini Calendar Grid */}
-                  <div className="grid grid-cols-7 gap-1 mt-4 text-xs">
-                    {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                      <div key={i} className="text-center font-medium text-gray-500 p-2">
-                        {day}
-                      </div>
-                    ))}
-                    {Array.from({ length: 31 }, (_, i) => i + 1).map((date) => (
-                      <button
-                        key={date}
-                        className={`p-2 text-center rounded ${
-                          space.availability.available.includes(date)
-                            ? 'bg-blue-500 text-white hover:bg-blue-600'
-                            : space.availability.booked.includes(date)
-                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                            : 'hover:bg-gray-100'
-                        }`}
-                        disabled={space.availability.booked.includes(date)}
-                      >
-                        {date}
-                      </button>
-                    ))}
-                  </div>
+                  <CalendarComponent
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={handleDateSelect}
+                    className="rounded-md border-0 p-0 w-full"
+                    disabled={(date) => {
+                      // Disable past dates and already booked dates
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0);
+                      return date < today;
+                    }}
+                  />
                 </div>
+                {selectedDate && (
+                  <p className="text-sm text-green-600 mt-2">
+                    Selected: {selectedDate.toLocaleDateString()}
+                  </p>
+                )}
               </div>
 
               <Button 
@@ -267,6 +280,12 @@ const SpaceDetail = () => {
           </div>
         </div>
       </div>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onLogin={handleLogin}
+      />
     </div>
   );
 };

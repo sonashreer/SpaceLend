@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import Header from '@/components/layout/Header';
 import { toast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 const ListSpace = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -20,6 +21,7 @@ const ListSpace = () => {
     photos: [] as File[],
     availableDates: [] as Date[]
   });
+  const navigate = useNavigate();
 
   const spaceTypes = [
     { value: 'driveway', label: 'Driveway', icon: Car },
@@ -32,7 +34,10 @@ const ListSpace = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    setFormData(prev => ({ ...prev, photos: [...prev.photos, ...files] }));
+    if (files.length > 0) {
+      setFormData(prev => ({ ...prev, photos: [...prev.photos, ...files] }));
+      console.log('Photos uploaded:', files.length);
+    }
   };
 
   const handleDateSelect = (date: Date | undefined) => {
@@ -107,18 +112,8 @@ const ListSpace = () => {
       description: "Your space has been successfully listed and is now live.",
     });
 
-    // Reset form and redirect to my listings
-    setFormData({
-      spaceType: '',
-      title: '',
-      description: '',
-      location: '',
-      price: '',
-      photos: [],
-      availableDates: []
-    });
-    setCurrentStep(1);
-    window.location.href = '/my-listings';
+    // Navigate to my listings page
+    navigate('/my-listings');
   };
 
   return (
@@ -183,8 +178,8 @@ const ListSpace = () => {
                   id="photo-upload"
                 />
                 <label htmlFor="photo-upload">
-                  <Button variant="outline" className="cursor-pointer">
-                    Choose Files
+                  <Button variant="outline" className="cursor-pointer" asChild>
+                    <span>Choose Files</span>
                   </Button>
                 </label>
               </div>
@@ -281,6 +276,12 @@ const ListSpace = () => {
                   selected={undefined}
                   onSelect={handleDateSelect}
                   className="rounded-md border p-3 pointer-events-auto"
+                  disabled={(date) => {
+                    // Disable past dates
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    return date < today;
+                  }}
                   modifiers={{
                     selected: formData.availableDates
                   }}

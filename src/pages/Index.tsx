@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Upload, Calendar, CheckCircle, Star } from 'lucide-react';
+import { Upload, Calendar, CheckCircle, Star, Search, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import Header from '@/components/layout/Header';
 import AuthModal from '@/components/AuthModal';
 
@@ -10,11 +11,12 @@ const Index = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
-    setUserEmail(email);
+    setUserEmail('sophia.carter@example.com');
     setIsAuthModalOpen(false);
   };
 
@@ -31,7 +33,19 @@ const Index = () => {
     }
   };
 
-  // Fake reviews data
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/explore?location=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  // Fake reviews data with working profile photos
   const reviews = [
     {
       name: "Sarah M.",
@@ -59,13 +73,15 @@ const Index = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        onListSpace={handleListSpace}
+        userEmail={userEmail}
       />
 
-      {/* Hero Section with Background Image */}
+      {/* Hero Section with New Background Image */}
       <section 
         className="relative bg-gradient-to-br from-blue-900/80 to-indigo-900/80 py-20"
         style={{
-          backgroundImage: `url('/lovable-uploads/3e946b5a-df7a-4a3d-bed6-7c42a4d12b8d.png')`,
+          backgroundImage: `url('/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundBlendMode: 'overlay'
@@ -83,7 +99,7 @@ const Index = () => {
               event venues, and more. Turn your unused space into income.
             </p>
             
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
               <Button 
                 onClick={handleListSpace}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg"
@@ -95,6 +111,26 @@ const Index = () => {
                   Find a Space
                 </Button>
               </Link>
+            </div>
+
+            {/* Search Bar in Hero Section */}
+            <div className="max-w-md mx-auto">
+              <div className="relative flex">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Enter city or ZIP code..."
+                  className="pl-10 pr-4 py-3 flex-1 bg-white/90 border-0 text-gray-900 placeholder-gray-600"
+                />
+                <Button 
+                  onClick={handleSearch}
+                  className="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3"
+                >
+                  <Search className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -193,7 +229,7 @@ const Index = () => {
                   <img
                     src={review.avatar}
                     alt={review.name}
-                    className="w-12 h-12 rounded-full mr-4"
+                    className="w-12 h-12 rounded-full mr-4 object-cover"
                   />
                   <div>
                     <h4 className="font-semibold text-gray-900">{review.name}</h4>

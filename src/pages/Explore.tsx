@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Filter, Map, List as ListIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,16 +12,22 @@ import {
 } from '@/components/ui/select';
 import Header from '@/components/layout/Header';
 import SpaceCard from '@/components/SpaceCard';
+import { useSearchParams } from 'react-router-dom';
 
 const Explore = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams] = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('location') || '');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [priceFilter, setPriceFilter] = useState('');
   const [spaceTypeFilter, setSpaceTypeFilter] = useState('');
+  const [distanceFilter, setDistanceFilter] = useState('');
+  const [ratingFilter, setRatingFilter] = useState('');
+  const [availabilityFilter, setAvailabilityFilter] = useState('');
+  const [sortBy, setSortBy] = useState('relevance');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
 
-  // Mock data for different space types
+  // Default mock listings - always show these 5
   const mockListings = [
     {
       id: '1',
@@ -80,11 +86,16 @@ const Explore = () => {
     }
   ];
 
+  // Show default listings on page load
+  useEffect(() => {
+    setSearchResults(mockListings);
+    setHasSearched(true);
+  }, []);
+
   const handleSearch = () => {
-    if (searchQuery.trim()) {
-      setSearchResults(mockListings);
-      setHasSearched(true);
-    }
+    // Always show the same 5 listings regardless of search query
+    setSearchResults(mockListings);
+    setHasSearched(true);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -102,6 +113,22 @@ const Explore = () => {
       (priceFilter === '100+' && space.price > 100);
     
     return matchesType && matchesPrice;
+  });
+
+  // Sort listings
+  const sortedResults = [...filteredResults].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'rating':
+        return b.rating - a.rating;
+      case 'distance':
+        return parseFloat(a.distance) - parseFloat(b.distance);
+      default:
+        return 0;
+    }
   });
 
   const handleBooking = (spaceId: string) => {
@@ -144,6 +171,7 @@ const Explore = () => {
                   <SelectValue placeholder="Space Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
+                  <SelectItem value="">Show All Listings</SelectItem>
                   <SelectItem value="driveway">Driveway</SelectItem>
                   <SelectItem value="garage">Garage</SelectItem>
                   <SelectItem value="room">Room</SelectItem>
@@ -158,6 +186,7 @@ const Explore = () => {
                   <SelectValue placeholder="Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
+                  <SelectItem value="">Show All Listings</SelectItem>
                   <SelectItem value="0-25">$0 - $25</SelectItem>
                   <SelectItem value="25-50">$25 - $50</SelectItem>
                   <SelectItem value="50-100">$50 - $100</SelectItem>
@@ -165,10 +194,19 @@ const Explore = () => {
                 </SelectContent>
               </Select>
 
-              <Button variant="outline" size="sm">
-                <Filter className="w-4 h-4 mr-2" />
-                More Filters
-              </Button>
+              <Select>
+                <SelectTrigger className="w-[120px]">
+                  <SelectValue placeholder="More Filters" />
+                </SelectTrigger>
+                <SelectContent className="bg-white">
+                  <SelectItem value="distance-1">Within 1 mile</SelectItem>
+                  <SelectItem value="distance-5">Within 5 miles</SelectItem>
+                  <SelectItem value="distance-10">Within 10 miles</SelectItem>
+                  <SelectItem value="rating-4">4+ Rating</SelectItem>
+                  <SelectItem value="rating-45">4.5+ Rating</SelectItem>
+                  <SelectItem value="available-only">Only Available</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {/* View Toggle */}
@@ -197,10 +235,10 @@ const Explore = () => {
         {hasSearched && (
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Spaces near {searchQuery}</h1>
-              <p className="text-gray-600">{filteredResults.length} spaces available</p>
+              <h1 className="text-2xl font-bold text-gray-900">Available Spaces</h1>
+              <p className="text-gray-600">{sortedResults.length} spaces available</p>
             </div>
-            <Select defaultValue="relevance">
+            <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger className="w-[160px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
@@ -216,15 +254,9 @@ const Explore = () => {
         )}
 
         {/* Results */}
-        {!hasSearched ? (
-          <div className="text-center py-16">
-            <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Search for Spaces</h3>
-            <p className="text-gray-600">Enter a location to find available spaces in your area</p>
-          </div>
-        ) : viewMode === 'list' ? (
+        {viewMode === 'list' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredResults.map((space) => (
+            {sortedResults.map((space) => (
               <SpaceCard
                 key={space.id}
                 id={space.id}
@@ -242,12 +274,12 @@ const Explore = () => {
         ) : (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="h-96 bg-gradient-to-br from-blue-100 to-indigo-100 relative">
-              {/* Fake Interactive Map */}
+              {/* Interactive Map View */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <Map className="w-16 h-16 text-blue-500 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 mb-2">Interactive Map View</h3>
-                  <p className="text-gray-600">Map showing {filteredResults.length} available spaces</p>
+                  <p className="text-gray-600">Map showing {sortedResults.length} available spaces</p>
                 </div>
               </div>
               
@@ -263,7 +295,7 @@ const Explore = () => {
             <div className="p-4 border-t border-gray-200">
               <div className="flex justify-between items-center">
                 <p className="text-sm text-gray-600">
-                  Showing {filteredResults.length} spaces on map
+                  Showing {sortedResults.length} spaces on map
                 </p>
                 <Button 
                   variant="outline" 
