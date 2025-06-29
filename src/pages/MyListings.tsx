@@ -25,34 +25,63 @@ const MyListings = () => {
     // Load listings from localStorage
     const savedListings = JSON.parse(localStorage.getItem('myListings') || '[]');
     
-    // If no saved listings, use default mock data
-    if (savedListings.length === 0) {
-      const defaultListings = [
-        {
-          id: '1',
-          title: 'Downtown Parking Spot',
-          location: '123 Main Street, Unit 4B',
-          price: 25,
-          rating: 4.8,
-          reviewCount: 127,
-          image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop',
-          totalEarnings: 2300
-        },
-        {
-          id: '2',
-          title: 'Storage Unit in Midtown',
-          location: '456 Oak Avenue, Building C',
-          price: 40,
-          rating: 4.9,
-          reviewCount: 89,
-          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
-          totalEarnings: 1800
-        }
-      ];
-      setListings(defaultListings);
-    } else {
-      setListings(savedListings);
-    }
+    // Default fake listings
+    const defaultListings = [
+      {
+        id: '1',
+        title: 'Downtown Parking Spot',
+        location: '123 Main Street, Unit 4B',
+        price: 25,
+        rating: 4.8,
+        reviewCount: 127,
+        image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop',
+        totalEarnings: 2300
+      },
+      {
+        id: '2',
+        title: 'Storage Unit in Midtown',
+        location: '456 Oak Avenue, Building C',
+        price: 40,
+        rating: 4.9,
+        reviewCount: 89,
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop',
+        totalEarnings: 1800
+      },
+      {
+        id: '3',
+        title: 'Garage Space in Hollywood',
+        location: '789 Sunset Blvd, Hollywood, CA',
+        price: 35,
+        rating: 4.7,
+        reviewCount: 64,
+        image: 'https://images.unsplash.com/photo-1558618047-3c8c6d8e2c67?w=400&h=300&fit=crop',
+        totalEarnings: 1450
+      },
+      {
+        id: '4',
+        title: 'Warehouse Storage Space',
+        location: '321 Industrial Ave, LA, CA',
+        price: 60,
+        rating: 4.6,
+        reviewCount: 42,
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
+        totalEarnings: 2100
+      },
+      {
+        id: '5',
+        title: 'Private Driveway Parking',
+        location: '654 Residential St, Beverly Hills, CA',
+        price: 30,
+        rating: 4.9,
+        reviewCount: 156,
+        image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+        totalEarnings: 1950
+      }
+    ];
+    
+    // Combine fake listings with user's saved listings
+    const allListings = [...defaultListings, ...savedListings];
+    setListings(allListings);
   }, []);
 
   if (!isLoggedIn) {
@@ -89,10 +118,14 @@ const MyListings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
       />
       
       <div className="flex">
-        <Sidebar />
+        <Sidebar 
+          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+          userName="Sophia Carter"
+        />
         
         <div className="flex-1 p-8">
           <div className="flex items-center justify-between mb-8">

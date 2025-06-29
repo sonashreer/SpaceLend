@@ -64,10 +64,14 @@ const Dashboard = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
       />
       
       <div className="flex">
-        <Sidebar />
+        <Sidebar 
+          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+          userName="Sophia Carter"
+        />
         
         <div className="flex-1 p-8">
           <div className="mb-8">

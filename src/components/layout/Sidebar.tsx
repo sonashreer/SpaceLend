@@ -7,11 +7,12 @@ import {
   MessageSquare, 
   DollarSign, 
   Settings,
-  User 
+  Calendar
 } from 'lucide-react';
 
 const sidebarItems = [
   { icon: Home, label: 'Dashboard', path: '/dashboard' },
+  { icon: Calendar, label: 'My Bookings', path: '/my-bookings' },
   { icon: List, label: 'My Listings', path: '/my-listings' },
   { icon: MessageSquare, label: 'Messages', path: '/messages' },
   { icon: DollarSign, label: 'Earnings', path: '/earnings' },
@@ -25,7 +26,7 @@ interface SidebarProps {
 
 const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
   const location = useLocation();
-  const defaultAvatar = "https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face";
+  const defaultAvatar = "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png";
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
@@ -35,7 +36,7 @@ const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
           <img
             src={userAvatar || defaultAvatar}
             alt="Profile"
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full object-cover"
           />
           <div>
             <h3 className="font-semibold text-gray-900">{userName}</h3>

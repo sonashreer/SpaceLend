@@ -23,8 +23,8 @@ const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Sophia Carter's avatar - default profile pic
-  const defaultAvatar = "https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face";
+  // Sophia Carter's avatar - updated profile pic
+  const defaultAvatar = "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png";
 
   const handleListSpace = () => {
     if (onListSpace) {

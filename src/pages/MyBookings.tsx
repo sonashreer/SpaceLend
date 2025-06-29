@@ -18,7 +18,7 @@ const MyBookings = () => {
     setIsLoggedIn(false);
   };
 
-  // Mock bookings data
+  // Fake bookings data with 5 completed bookings
   const bookings = [
     {
       id: '1',
@@ -41,6 +41,39 @@ const MyBookings = () => {
       totalPrice: 40,
       status: 'completed',
       rating: 4.8
+    },
+    {
+      id: '3',
+      title: 'Hollywood Storage Unit',
+      location: '789 Sunset Blvd, Hollywood, CA',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c6d8e2c67?w=400&h=300&fit=crop',
+      checkIn: '2024-12-10',
+      checkOut: '2024-12-12',
+      totalPrice: 70,
+      status: 'completed',
+      rating: 4.7
+    },
+    {
+      id: '4',
+      title: 'Warehouse Space Rental',
+      location: '321 Industrial Ave, LA, CA',
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
+      checkIn: '2024-12-05',
+      checkOut: '2024-12-07',
+      totalPrice: 120,
+      status: 'completed',
+      rating: 4.6
+    },
+    {
+      id: '5',
+      title: 'Beverly Hills Driveway',
+      location: '654 Residential St, Beverly Hills, CA',
+      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+      checkIn: '2024-12-01',
+      checkOut: '2024-12-03',
+      totalPrice: 90,
+      status: 'completed',
+      rating: 4.9
     }
   ];
 
@@ -78,12 +111,12 @@ const MyBookings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        userAvatar="https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face"
+        userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
       />
       
       <div className="flex">
         <Sidebar 
-          userAvatar="https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face"
+          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
           userName="Sophia Carter"
         />
         
