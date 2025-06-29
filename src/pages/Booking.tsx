@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
-import { CreditCard, Paypal, CheckCircle } from 'lucide-react';
+import { CreditCard, Wallet, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -135,7 +134,7 @@ const Booking = () => {
                   <div className="flex items-center space-x-2 p-4 border rounded-lg">
                     <RadioGroupItem value="paypal" id="paypal" />
                     <Label htmlFor="paypal" className="flex items-center cursor-pointer">
-                      <Paypal className="w-5 h-5 mr-2" />
+                      <Wallet className="w-5 h-5 mr-2" />
                       PayPal
                     </Label>
                   </div>
