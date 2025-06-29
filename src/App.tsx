@@ -8,7 +8,9 @@ import Index from "./pages/Index";
 import ListSpace from "./pages/ListSpace";
 import Explore from "./pages/Explore";
 import SpaceDetail from "./pages/SpaceDetail";
+import Booking from "./pages/Booking";
 import Dashboard from "./pages/Dashboard";
+import MyBookings from "./pages/MyBookings";
 import MyListings from "./pages/MyListings";
 import Messages from "./pages/Messages";
 import Earnings from "./pages/Earnings";
@@ -28,7 +30,9 @@ const App = () => (
           <Route path="/list-space" element={<ListSpace />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/space/:id" element={<SpaceDetail />} />
+          <Route path="/booking/:id" element={<Booking />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
           <Route path="/my-listings" element={<MyListings />} />
           <Route path="/messages" element={<Messages />} />
           <Route path="/earnings" element={<Earnings />} />

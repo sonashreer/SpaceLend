@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Globe, Menu, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +21,7 @@ interface HeaderProps {
 
 const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace, userEmail }: HeaderProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Sophia Carter's avatar - default profile pic
   const defaultAvatar = "https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face";
@@ -85,6 +86,9 @@ const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace
                 <DropdownMenuContent align="end" className="bg-white w-48">
                   <DropdownMenuItem asChild>
                     <Link to="/dashboard">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/my-bookings">My Bookings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to="/my-listings">My Listings</Link>

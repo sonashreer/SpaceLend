@@ -19,7 +19,7 @@ const ListSpace = () => {
     location: '',
     price: '',
     photos: [] as File[],
-    availableDates: [] as Date[]
+    availableDates: {from: undefined, to: undefined} as {from: Date | undefined, to: Date | undefined}
   });
   const navigate = useNavigate();
 
@@ -40,28 +40,11 @@ const ListSpace = () => {
     }
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
-    if (!date) return;
-    
-    setFormData(prev => {
-      const isAlreadySelected = prev.availableDates.some(
-        selectedDate => selectedDate.toDateString() === date.toDateString()
-      );
-
-      if (isAlreadySelected) {
-        return {
-          ...prev,
-          availableDates: prev.availableDates.filter(
-            selectedDate => selectedDate.toDateString() !== date.toDateString()
-          )
-        };
-      } else {
-        return {
-          ...prev,
-          availableDates: [...prev.availableDates, date]
-        };
-      }
-    });
+  const handleDateSelect = (range: {from: Date | undefined, to: Date | undefined} | undefined) => {
+    setFormData(prev => ({
+      ...prev,
+      availableDates: range || {from: undefined, to: undefined}
+    }));
   };
 
   const canProceed = () => {
@@ -73,7 +56,7 @@ const ListSpace = () => {
       case 3:
         return formData.title && formData.location && formData.description && formData.price;
       case 4:
-        return formData.availableDates.length > 0;
+        return formData.availableDates.from !== undefined;
       default:
         return false;
     }
@@ -268,12 +251,12 @@ const ListSpace = () => {
           {currentStep === 4 && (
             <div>
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Set your availability</h2>
-              <p className="text-gray-600 mb-4">Select the dates when your space is available for rent</p>
+              <p className="text-gray-600 mb-4">Select the date range when your space is available for rent</p>
               
               <div className="flex justify-center">
                 <CalendarComponent
-                  mode="single"
-                  selected={undefined}
+                  mode="range"
+                  selected={formData.availableDates}
                   onSelect={handleDateSelect}
                   className="rounded-md border p-3 pointer-events-auto"
                   disabled={(date) => {
@@ -282,33 +265,20 @@ const ListSpace = () => {
                     today.setHours(0, 0, 0, 0);
                     return date < today;
                   }}
-                  modifiers={{
-                    selected: formData.availableDates
-                  }}
-                  modifiersStyles={{
-                    selected: {
-                      backgroundColor: '#3b82f6',
-                      color: 'white'
-                    }
-                  }}
                 />
               </div>
 
-              {formData.availableDates.length > 0 && (
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600 mb-2">
-                    Selected dates ({formData.availableDates.length}):
+              {formData.availableDates.from && (
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Selected availability:</strong>
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {formData.availableDates.map((date, index) => (
-                      <span
-                        key={index}
-                        className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm"
-                      >
-                        {date.toLocaleDateString()}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-sm text-blue-600 mt-1">
+                    From: {formData.availableDates.from.toLocaleDateString()}
+                    {formData.availableDates.to && formData.availableDates.to !== formData.availableDates.from && 
+                      ` - To: ${formData.availableDates.to.toLocaleDateString()}`
+                    }
+                  </p>
                 </div>
               )}
             </div>

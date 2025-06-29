@@ -205,7 +205,10 @@ const Explore = () => {
 
   const handleBooking = (spaceId: string) => {
     console.log('Booking space:', spaceId);
-    // Navigate to booking page or show booking modal
+    // For Private Driveway Spot (id: '2'), navigate to the correct detail page
+    if (spaceId === '2') {
+      window.location.href = `/space/2`;
+    }
   };
 
   const handleLogout = () => {
@@ -255,7 +258,7 @@ const Explore = () => {
                   <SelectValue placeholder="Space Type" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="all">Show All Listings</SelectItem>
+                  <SelectItem value="all">All Types</SelectItem>
                   <SelectItem value="driveway">Driveway</SelectItem>
                   <SelectItem value="garage">Garage</SelectItem>
                   <SelectItem value="room">Room</SelectItem>
@@ -270,7 +273,7 @@ const Explore = () => {
                   <SelectValue placeholder="Price" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="all">Show All Listings</SelectItem>
+                  <SelectItem value="all">All Prices</SelectItem>
                   <SelectItem value="0-25">$0 - $25</SelectItem>
                   <SelectItem value="25-50">$25 - $50</SelectItem>
                   <SelectItem value="50-100">$50 - $100</SelectItem>
@@ -280,16 +283,13 @@ const Explore = () => {
 
               <Select value={distanceFilter} onValueChange={setDistanceFilter}>
                 <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="More Filters" />
+                  <SelectValue placeholder="Distance" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="all">Show All Listings</SelectItem>
+                  <SelectItem value="all">All Distances</SelectItem>
                   <SelectItem value="1">Within 1 mile</SelectItem>
                   <SelectItem value="5">Within 5 miles</SelectItem>
                   <SelectItem value="10">Within 10 miles</SelectItem>
-                  <SelectItem value="4" onSelect={() => setRatingFilter('4')}>4+ Rating</SelectItem>
-                  <SelectItem value="4.5" onSelect={() => setRatingFilter('4.5')}>4.5+ Rating</SelectItem>
-                  <SelectItem value="available" onSelect={() => setAvailabilityFilter('available')}>Only Available</SelectItem>
                 </SelectContent>
               </Select>
             </div>
