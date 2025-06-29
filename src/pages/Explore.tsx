@@ -26,8 +26,9 @@ const Explore = () => {
   const [sortBy, setSortBy] = useState('relevance');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Default mock listings - always show these 5
+  // Extended mock listings - 10 total
   const mockListings = [
     {
       id: '1',
@@ -83,18 +84,82 @@ const Explore = () => {
       distance: '1.8 miles',
       image: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=300&fit=crop',
       type: 'event'
+    },
+    {
+      id: '6',
+      title: 'Spacious Warehouse',
+      location: '234 Industrial Blvd, Carson',
+      price: 150,
+      rating: 4.5,
+      reviewCount: 34,
+      distance: '4.2 miles',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop',
+      type: 'other'
+    },
+    {
+      id: '7',
+      title: 'Covered Parking Spot',
+      location: '567 Sunset Blvd, Hollywood',
+      price: 30,
+      rating: 4.4,
+      reviewCount: 78,
+      distance: '2.5 miles',
+      image: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=400&h=300&fit=crop',
+      type: 'garage'
+    },
+    {
+      id: '8',
+      title: 'Private Office Space',
+      location: '890 Wilshire Blvd, Beverly Hills',
+      price: 120,
+      rating: 4.8,
+      reviewCount: 56,
+      distance: '1.9 miles',
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop',
+      type: 'other'
+    },
+    {
+      id: '9',
+      title: 'Residential Driveway',
+      location: '123 Maple Ave, Pasadena',
+      price: 20,
+      rating: 4.3,
+      reviewCount: 92,
+      distance: '5.1 miles',
+      image: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&h=300&fit=crop',
+      type: 'driveway'
+    },
+    {
+      id: '10',
+      title: 'Mini Storage Unit',
+      location: '456 Storage Way, Glendale',
+      price: 35,
+      rating: 4.6,
+      reviewCount: 41,
+      distance: '3.8 miles',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop',
+      type: 'storage'
     }
   ];
 
-  // Show default listings on page load
+  // Show 10 default listings on page load
   useEffect(() => {
     setSearchResults(mockListings);
     setHasSearched(true);
+    
+    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+    setIsLoggedIn(loggedIn);
   }, []);
 
   const handleSearch = () => {
-    // Always show the same 5 listings regardless of search query
-    setSearchResults(mockListings);
+    if (searchQuery) {
+      // Show original 5 listings when searching
+      const originalFive = mockListings.slice(0, 5);
+      setSearchResults(originalFive);
+    } else {
+      // Show all 10 when no search query
+      setSearchResults(mockListings);
+    }
     setHasSearched(true);
   };
 
@@ -111,8 +176,15 @@ const Explore = () => {
       (priceFilter === '25-50' && space.price > 25 && space.price <= 50) ||
       (priceFilter === '50-100' && space.price > 50 && space.price <= 100) ||
       (priceFilter === '100+' && space.price > 100);
+    const matchesDistance = !distanceFilter ||
+      (distanceFilter === '1' && parseFloat(space.distance) <= 1) ||
+      (distanceFilter === '5' && parseFloat(space.distance) <= 5) ||
+      (distanceFilter === '10' && parseFloat(space.distance) <= 10);
+    const matchesRating = !ratingFilter ||
+      (ratingFilter === '4' && space.rating >= 4) ||
+      (ratingFilter === '4.5' && space.rating >= 4.5);
     
-    return matchesType && matchesPrice;
+    return matchesType && matchesPrice && matchesDistance && matchesRating;
   });
 
   // Sort listings
@@ -136,9 +208,21 @@ const Explore = () => {
     // Navigate to booking page or show booking modal
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('userLoggedIn');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
+      <Header 
+        isLoggedIn={isLoggedIn}
+        onLogout={handleLogout}
+        userEmail={isLoggedIn ? 'sophia.carter@example.com' : undefined}
+        userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
+      />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Filters */}
@@ -199,12 +283,12 @@ const Explore = () => {
                   <SelectValue placeholder="More Filters" />
                 </SelectTrigger>
                 <SelectContent className="bg-white">
-                  <SelectItem value="distance-1">Within 1 mile</SelectItem>
-                  <SelectItem value="distance-5">Within 5 miles</SelectItem>
-                  <SelectItem value="distance-10">Within 10 miles</SelectItem>
-                  <SelectItem value="rating-4">4+ Rating</SelectItem>
-                  <SelectItem value="rating-45">4.5+ Rating</SelectItem>
-                  <SelectItem value="available-only">Only Available</SelectItem>
+                  <SelectItem value="distance-1" onSelect={() => setDistanceFilter('1')}>Within 1 mile</SelectItem>
+                  <SelectItem value="distance-5" onSelect={() => setDistanceFilter('5')}>Within 5 miles</SelectItem>
+                  <SelectItem value="distance-10" onSelect={() => setDistanceFilter('10')}>Within 10 miles</SelectItem>
+                  <SelectItem value="rating-4" onSelect={() => setRatingFilter('4')}>4+ Rating</SelectItem>
+                  <SelectItem value="rating-45" onSelect={() => setRatingFilter('4.5')}>4.5+ Rating</SelectItem>
+                  <SelectItem value="available-only" onSelect={() => setAvailabilityFilter('available')}>Only Available</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -274,7 +358,7 @@ const Explore = () => {
         ) : (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
             <div className="h-96 bg-gradient-to-br from-blue-100 to-indigo-100 relative">
-              {/* Interactive Map View */}
+              {/* Fake Interactive Map View */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
                   <Map className="w-16 h-16 text-blue-500 mx-auto mb-4" />
@@ -283,12 +367,20 @@ const Explore = () => {
                 </div>
               </div>
               
-              {/* Fake map markers */}
-              <div className="absolute top-1/4 left-1/3 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-pulse"></div>
-              <div className="absolute top-1/2 right-1/3 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-pulse"></div>
-              <div className="absolute bottom-1/3 left-1/2 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-pulse"></div>
-              <div className="absolute top-3/4 left-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-pulse"></div>
-              <div className="absolute top-1/3 right-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-pulse"></div>
+              {/* Fake map markers for the 5 default spaces */}
+              <div className="absolute top-1/4 left-1/3 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-bounce cursor-pointer" title="Secure Downtown Garage - $35/day"></div>
+              <div className="absolute top-1/2 right-1/3 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-bounce cursor-pointer" title="Private Driveway Spot - $25/day"></div>
+              <div className="absolute bottom-1/3 left-1/2 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-bounce cursor-pointer" title="Cozy Guest Room - $80/day"></div>
+              <div className="absolute top-3/4 left-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-bounce cursor-pointer" title="Climate Controlled Storage - $45/day"></div>
+              <div className="absolute top-1/3 right-1/4 w-4 h-4 bg-red-500 rounded-full shadow-lg animate-bounce cursor-pointer" title="Event Space Downtown - $200/day"></div>
+              
+              {/* Map legend */}
+              <div className="absolute top-4 left-4 bg-white rounded-lg p-3 shadow-lg">
+                <div className="flex items-center space-x-2 text-sm">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <span>Available Spaces</span>
+                </div>
+              </div>
             </div>
             
             {/* Map controls */}
