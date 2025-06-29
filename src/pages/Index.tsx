@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Star, Users, Shield, Clock, ArrowRight, CheckCircle, MessageSquare, HelpCircle } from 'lucide-react';
+import { Search, ArrowRight, Star, Shield, Clock, DollarSign, MapPin, Users, CheckCircle, MessageCircle, Calendar, Phone, Mail, MapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,401 +10,453 @@ import AuthModal from '@/components/AuthModal';
 const Index = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
-    // Default to Sophia Carter
     setIsLoggedIn(true);
     setIsAuthModalOpen(false);
-    localStorage.setItem('userLoggedIn', 'true');
-    localStorage.setItem('userEmail', 'sophia.carter@example.com');
-    localStorage.setItem('userName', 'Sophia Carter');
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('userLoggedIn');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
   };
 
   const handleListSpace = () => {
-    if (!isLoggedIn) {
-      setIsAuthModalOpen(true);
-    } else {
+    if (isLoggedIn) {
       navigate('/list-space');
-    }
-  };
-
-  const handleFindSpace = () => {
-    if (searchQuery) {
-      navigate(`/explore?location=${encodeURIComponent(searchQuery)}`);
     } else {
-      navigate('/explore');
+      setIsAuthModalOpen(true);
     }
   };
-
-  const handleSearchKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleFindSpace();
-    }
-  };
-
-  React.useEffect(() => {
-    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
-  }, []);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white">
       <Header 
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
         onListSpace={handleListSpace}
-        userEmail={isLoggedIn ? 'sophia.carter@example.com' : undefined}
-        userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
+        userAvatar={isLoggedIn ? "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png" : undefined}
       />
-      
-      {/* Hero Section with Background Image */}
-      <section 
-        className="relative bg-cover bg-center bg-no-repeat py-20 lg:py-32"
-        style={{
-          backgroundImage: 'url(/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
-      >
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/40"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            Rent the perfect space.<br />
-            Earn from yours.
-          </h1>
-          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
-            Connect space owners with renters. From parking spots to event venues, 
-            find what you need or monetize what you have.
-          </p>
-          
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Button 
-              onClick={handleListSpace}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg font-semibold"
-            >
-              List your space
-            </Button>
-            <Button 
-              onClick={handleFindSpace}
-              variant="outline" 
-              className="bg-white hover:bg-gray-50 text-gray-900 border-white px-8 py-3 text-lg font-semibold"
-            >
-              Find a space
-            </Button>
-          </div>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
-            <div className="relative flex bg-white rounded-lg shadow-lg overflow-hidden">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={handleSearchKeyPress}
-                placeholder="Enter location (ZIP code, city, etc.)"
-                className="pl-12 pr-4 py-4 flex-1 border-0 text-lg focus:ring-0"
-              />
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 pt-16 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+              Rent unused spaces,<br />
+              <span className="text-blue-600">earn extra income</span>
+            </h1>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              Transform your empty garage, parking spot, or storage area into a profitable rental space. Join thousands earning passive income.
+            </p>
+            
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto mb-8">
+              <div className="flex flex-col sm:flex-row gap-4 p-2 bg-white rounded-2xl shadow-lg">
+                <Input
+                  type="text"
+                  placeholder="Where do you need space?"
+                  className="flex-1 border-0 text-lg py-6"
+                />
+                <Link to="/explore">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg rounded-xl">
+                    <Search className="w-5 h-5 mr-2" />
+                    Find Space
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link to="/explore">
+                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg">
+                  Explore Spaces
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
               <Button 
-                onClick={handleFindSpace}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-none"
+                size="lg" 
+                variant="outline" 
+                className="px-8 py-4 text-lg border-2"
+                onClick={handleListSpace}
               >
-                Search
+                List Your Space
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 bg-gray-50">
+      {/* Why Choose SpaceLend Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Why choose SpaceLend?</h2>
-            <p className="text-xl text-gray-600">The easiest way to rent and list spaces</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Why Choose SpaceLend?
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              We make renting and listing spaces simple, secure, and profitable
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-white" />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Trusted Community</h3>
-              <p className="text-gray-600">Verified users and secure transactions for peace of mind</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Secure & Safe</h3>
+              <p className="text-gray-600">
+                All transactions are protected with bank-level security. Identity verification and insurance coverage included.
+              </p>
             </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-white" />
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <DollarSign className="w-8 h-8 text-green-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure Payments</h3>
-              <p className="text-gray-600">Protected transactions with instant payouts</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Easy Earnings</h3>
+              <p className="text-gray-600">
+                Start earning from your unused space immediately. Set your price, availability, and watch the bookings roll in.
+              </p>
             </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Clock className="w-8 h-8 text-white" />
+
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Clock className="w-8 h-8 text-purple-600" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">24/7 Support</h3>
-              <p className="text-gray-600">Round-the-clock assistance for all your needs</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">24/7 Support</h3>
+              <p className="text-gray-600">
+                Our dedicated support team is here to help you succeed. Get assistance anytime, anywhere.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How it works Section */}
-      <section className="py-16 bg-white">
+      {/* How It Works Section */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">How it works</h2>
-            <p className="text-xl text-gray-600">Get started in just a few simple steps</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Getting started is simple. Follow these easy steps to start earning or find the perfect space.
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">1</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">List Your Space</h3>
-              <p className="text-gray-600">Create a listing with photos, description, and pricing for your unused space</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">2</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Connect with Renters</h3>
-              <p className="text-gray-600">Receive bookings from verified users and communicate through our platform</p>
-            </div>
-            
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">3</span>
-              </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Earn Money</h3>
-              <p className="text-gray-600">Get paid securely through our platform with instant payouts</p>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Reviews Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">What our users say</h2>
-            <p className="text-xl text-gray-600">Real experiences from our community</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Review 1 - Fixed profile picture */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop&crop=face" 
-                  alt="Michael Johnson" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-semibold text-gray-900">Michael Johnson</h4>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            {/* For Space Owners */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">For Space Owners</h3>
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">List Your Space</h4>
+                    <p className="text-gray-600">Add photos, set your price, and describe your available space in minutes.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Get Bookings</h4>
+                    <p className="text-gray-600">Receive booking requests from verified users looking for space.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Earn Money</h4>
+                    <p className="text-gray-600">Get paid securely through our platform. Payments are processed automatically.</p>
                   </div>
                 </div>
               </div>
-              <p className="text-gray-700">"Found the perfect parking spot for my daily commute. The process was seamless and the owner was very accommodating."</p>
             </div>
 
-            {/* Review 2 - Fixed profile picture */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop&crop=face" 
-                  alt="Sarah Williams" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-semibold text-gray-900">Sarah Williams</h4>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
+            {/* For Space Seekers */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">For Space Seekers</h3>
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Search & Browse</h4>
+                    <p className="text-gray-600">Find the perfect space by location, size, price, and availability.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Book Instantly</h4>
+                    <p className="text-gray-600">Reserve your space with instant booking or send a request to the owner.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div>
+                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Access & Use</h4>
+                    <p className="text-gray-600">Get access details and start using your rented space immediately.</p>
                   </div>
                 </div>
               </div>
-              <p className="text-gray-700">"Listing my garage space was so easy! I'm earning extra income every month with minimal effort."</p>
-            </div>
-
-            {/* Review 3 - Fixed profile picture */}
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <div className="flex items-center mb-4">
-                <img 
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50&h=50&fit=crop&crop=face" 
-                  alt="David Chen" 
-                  className="w-12 h-12 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h4 className="font-semibold text-gray-900">David Chen</h4>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star key={star} className="w-4 h-4 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700">"Great platform for finding event spaces. Booked a perfect venue for my daughter's birthday party at an amazing price."</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Spaces Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Featured Spaces</h2>
-            <p className="text-xl text-gray-600">Discover amazing spaces in your area</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Featured Space 1 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop" 
-                alt="Secure Garage" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Secure Downtown Garage</h3>
-                <p className="text-gray-600 mb-4">Perfect for daily parking in the heart of the city</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-blue-600">$35/day</span>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Space 2 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop" 
-                alt="Cozy Room" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Cozy Guest Room</h3>
-                <p className="text-gray-600 mb-4">Comfortable accommodation in a quiet neighborhood</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-blue-600">$80/night</span>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            {/* Featured Space 3 */}
-            <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-              <img 
-                src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=400&h=300&fit=crop" 
-                alt="Event Space" 
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Modern Event Space</h3>
-                <p className="text-gray-600 mb-4">Elegant venue for special occasions and gatherings</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-2xl font-bold text-blue-600">$200/day</span>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                    View Details
-                  </Button>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Featured Spaces
+            </h2>
+            <p className="text-xl text-gray-600">
+              Discover popular spaces in your area
+            </p>
           </div>
 
-          <div className="text-center mt-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                id: 1,
+                title: "Downtown Parking Garage",
+                location: "123 Main St, Downtown",
+                price: 15,
+                rating: 4.8,
+                reviews: 24,
+                image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop"
+              },
+              {
+                id: 2,
+                title: "Secure Storage Unit",
+                location: "456 Oak Ave, Midtown",
+                price: 25,
+                rating: 4.9,
+                reviews: 18,
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop"
+              },
+              {
+                id: 3,
+                title: "Private Driveway",
+                location: "789 Pine St, Suburbs",
+                price: 12,
+                rating: 4.7,
+                reviews: 31,
+                image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop"
+              }
+            ].map((space) => (
+              <div key={space.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                <img
+                  src={space.image}
+                  alt={space.title}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{space.title}</h3>
+                  <div className="flex items-center text-gray-600 mb-3">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    <span className="text-sm">{space.location}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Star className="w-4 h-4 text-yellow-400 fill-current mr-1" />
+                      <span className="text-sm font-medium">{space.rating}</span>
+                      <span className="text-sm text-gray-500 ml-1">({space.reviews})</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-lg font-bold text-gray-900">${space.price}</span>
+                      <span className="text-sm text-gray-500">/day</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
             <Link to="/explore">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3">
+              <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-2">
                 View All Spaces
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* List your space today Section */}
-      <section className="py-16 bg-blue-600">
+      {/* List Your Space Today Section */}
+      <section className="py-20 bg-blue-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">List your space today</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            List Your Space Today
+          </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Turn your unused space into income. Join thousands of hosts earning money on SpaceLend.
+            Turn your unused space into a reliable income stream. Join thousands of hosts already earning with SpaceLend.
           </p>
-          <div className="flex justify-center">
-            <Button 
-              onClick={handleListSpace}
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
-            >
-              Get Started
-            </Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">$500+</div>
+              <div className="text-blue-100">Average monthly earnings</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">10K+</div>
+              <div className="text-blue-100">Active hosts</div>
+            </div>
+            <div className="text-center">
+              <div className="text-3xl font-bold text-white mb-2">95%</div>
+              <div className="text-blue-100">Host satisfaction rate</div>
+            </div>
+          </div>
+          <Button 
+            size="lg" 
+            className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg"
+            onClick={handleListSpace}
+          >
+            Start Earning Today
+            <ArrowRight className="ml-2 w-5 h-5" />
+          </Button>
+        </div>
+      </section>
+
+      {/* Reviews Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              What Our Users Say
+            </h2>
+            <p className="text-xl text-gray-600">
+              Real reviews from real users
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah Johnson",
+                role: "Space Owner",
+                rating: 5,
+                comment: "I've been earning $600+ monthly from my garage space. SpaceLend made it so easy to get started!",
+                avatar: "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
+              },
+              {
+                name: "Mike Chen",
+                role: "Frequent Renter",
+                rating: 5,
+                comment: "Perfect for storing my RV when I'm not traveling. Safe, secure, and affordable spaces every time.",
+                avatar: "/lovable-uploads/3e946b5a-df7a-4a3d-bed6-7c42a4d12b8d.png"
+              },
+              {
+                name: "Emily Rodriguez",
+                role: "Small Business Owner",
+                rating: 5,
+                comment: "Found the perfect warehouse space for my inventory. SpaceLend saved me thousands compared to traditional storage.",
+                avatar: "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
+              }
+            ].map((review, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-md">
+                <div className="flex items-center mb-4">
+                  <img
+                    src={review.avatar}
+                    alt={review.name}
+                    className="w-12 h-12 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                    <p className="text-sm text-gray-600">{review.role}</p>
+                  </div>
+                </div>
+                <div className="flex mb-4">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-700">{review.comment}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
-            <p className="text-xl text-gray-600">Find answers to common questions</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-gray-600">
+              Everything you need to know about SpaceLend
+            </p>
           </div>
-          
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">How do I list my space?</h3>
-              <p className="text-gray-600">Simply click "List your space", create an account, and follow our step-by-step process to add photos, description, and pricing.</p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">How do payments work?</h3>
-              <p className="text-gray-600">We handle all payments securely. Renters pay through our platform, and hosts receive payouts within 24 hours of booking completion.</p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Is there insurance coverage?</h3>
-              <p className="text-gray-600">Yes, all bookings are covered by our comprehensive insurance policy to protect both hosts and renters.</p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">What types of spaces can I list?</h3>
-              <p className="text-gray-600">You can list parking spots, storage units, event spaces, guest rooms, and more. If you have unused space, you can probably rent it out!</p>
-            </div>
+
+          <div className="space-y-8">
+            {[
+              {
+                question: "How do I get paid as a space owner?",
+                answer: "Payments are processed automatically through our secure platform. You'll receive your earnings within 24 hours after each booking is completed."
+              },
+              {
+                question: "Is my space insured during rentals?",
+                answer: "Yes, all bookings include liability coverage. We also verify all renters to ensure your space is in good hands."
+              },
+              {
+                question: "Can I set my own availability and pricing?",
+                answer: "Absolutely! You have complete control over your space's availability, pricing, and booking requirements."
+              },
+              {
+                question: "What types of spaces can I list?",
+                answer: "You can list parking spots, garages, storage units, warehouses, driveways, basements, and any other unused space you have."
+              },
+              {
+                question: "How do I cancel a booking?",
+                answer: "Both renters and space owners can cancel bookings according to our cancellation policy. Free cancellation is available up to 24 hours before the booking starts."
+              }
+            ].map((faq, index) => (
+              <div key={index} className="border-b border-gray-200 pb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{faq.question}</h3>
+                <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-700">
+        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8">
+            Join thousands of users already earning and saving with SpaceLend
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button 
+              size="lg" 
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleListSpace}
+            >
+              List Your Space
+            </Button>
+            <Link to="/explore">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg">
+                Find a Space
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-gray-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Company Info */}
+            <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-2 mb-4">
                 <img 
                   src="/lovable-uploads/31401a05-e202-44df-b450-17dbd7b60472.png" 
@@ -413,44 +465,68 @@ const Index = () => {
                 />
                 <span className="text-xl font-bold">SpaceLend</span>
               </div>
-              <p className="text-gray-400">
-                Connect space owners with renters. The easiest way to monetize your unused space.
+              <p className="text-gray-400 mb-6 max-w-md">
+                Transform your unused space into income. The trusted platform for space rental and storage solutions.
               </p>
+              <div className="flex space-x-4">
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer">
+                  <Users className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer">
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-gray-700 cursor-pointer">
+                  <Mail className="w-5 h-5" />
+                </div>
+              </div>
             </div>
-            
+
+            {/* Company Links */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">About</a></li>
-                <li><a href="#" className="hover:text-white">Careers</a></li>
-                <li><a href="#" className="hover:text-white">Press</a></li>
-                <li><a href="#" className="hover:text-white">Blog</a></li>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Press</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Blog</a></li>
               </ul>
             </div>
-            
+
+            {/* Support Links */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Help Center</a></li>
-                <li><a href="#" className="hover:text-white">Contact Us</a></li>
-                <li><a href="#" className="hover:text-white">Safety</a></li>
-                <li><a href="#" className="hover:text-white">Community</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Terms</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
-                <li><a href="#" className="hover:text-white">Disclaimer</a></li>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Help Center</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Safety</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</a></li>
               </ul>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 SpaceLend. All rights reserved.</p>
+
+          {/* Contact Info */}
+          <div className="border-t border-gray-800 mt-12 pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="flex items-center space-x-3">
+                <Phone className="w-5 h-5 text-blue-400" />
+                <span className="text-gray-400">1-800-SPACELEND</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="w-5 h-5 text-blue-400" />
+                <span className="text-gray-400">hello@spacelend.com</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <MapIcon className="w-5 h-5 text-blue-400" />
+                <span className="text-gray-400">San Francisco, CA</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024 SpaceLend. All rights reserved.
+            </p>
           </div>
         </div>
       </footer>

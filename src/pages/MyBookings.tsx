@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, MapPin, Star } from 'lucide-react';
+import { Calendar, MapPin, Star, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
@@ -18,7 +18,7 @@ const MyBookings = () => {
     setIsLoggedIn(false);
   };
 
-  // Fake bookings data with 5 completed bookings
+  // Fake bookings data with 5 completed bookings and 1 confirmed
   const bookings = [
     {
       id: '1',
@@ -46,7 +46,7 @@ const MyBookings = () => {
       id: '3',
       title: 'Hollywood Storage Unit',
       location: '789 Sunset Blvd, Hollywood, CA',
-      image: 'https://images.unsplash.com/photo-1558618047-3c8c6d8e2c67?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
       checkIn: '2024-12-10',
       checkOut: '2024-12-12',
       totalPrice: 70,
@@ -57,7 +57,7 @@ const MyBookings = () => {
       id: '4',
       title: 'Warehouse Space Rental',
       location: '321 Industrial Ave, LA, CA',
-      image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
       checkIn: '2024-12-05',
       checkOut: '2024-12-07',
       totalPrice: 120,
@@ -68,7 +68,7 @@ const MyBookings = () => {
       id: '5',
       title: 'Beverly Hills Driveway',
       location: '654 Residential St, Beverly Hills, CA',
-      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
       checkIn: '2024-12-01',
       checkOut: '2024-12-03',
       totalPrice: 90,
@@ -111,12 +111,12 @@ const MyBookings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+        userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
       />
       
       <div className="flex">
         <Sidebar 
-          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+          userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
           userName="Sophia Carter"
         />
         
@@ -173,9 +173,23 @@ const MyBookings = () => {
                       </div>
                       <div className="flex items-center space-x-4">
                         <span className="text-lg font-bold text-gray-900">${booking.totalPrice}</span>
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
+                        <div className="flex space-x-2">
+                          {booking.status === 'confirmed' && (
+                            <>
+                              <Button variant="outline" size="sm">
+                                <Edit className="w-4 h-4 mr-1" />
+                                Amend
+                              </Button>
+                              <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                                <Trash2 className="w-4 h-4 mr-1" />
+                                Delete
+                              </Button>
+                            </>
+                          )}
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>

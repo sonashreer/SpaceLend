@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import Header from '@/components/layout/Header';
@@ -21,11 +21,19 @@ const MyListings = () => {
     setIsLoggedIn(false);
   };
 
+  const handleDeleteListing = (listingId: string) => {
+    setListings(listings.filter(listing => listing.id !== listingId));
+    // Also remove from localStorage if it exists there
+    const savedListings = JSON.parse(localStorage.getItem('myListings') || '[]');
+    const filteredSaved = savedListings.filter((listing: any) => listing.id !== listingId);
+    localStorage.setItem('myListings', JSON.stringify(filteredSaved));
+  };
+
   useEffect(() => {
     // Load listings from localStorage
     const savedListings = JSON.parse(localStorage.getItem('myListings') || '[]');
     
-    // Default fake listings
+    // Default fake listings with 5 items
     const defaultListings = [
       {
         id: '1',
@@ -54,7 +62,7 @@ const MyListings = () => {
         price: 35,
         rating: 4.7,
         reviewCount: 64,
-        image: 'https://images.unsplash.com/photo-1558618047-3c8c6d8e2c67?w=400&h=300&fit=crop',
+        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
         totalEarnings: 1450
       },
       {
@@ -64,7 +72,7 @@ const MyListings = () => {
         price: 60,
         rating: 4.6,
         reviewCount: 42,
-        image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&h=300&fit=crop',
+        image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
         totalEarnings: 2100
       },
       {
@@ -74,7 +82,7 @@ const MyListings = () => {
         price: 30,
         rating: 4.9,
         reviewCount: 156,
-        image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop',
         totalEarnings: 1950
       }
     ];
@@ -118,12 +126,12 @@ const MyListings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+        userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
       />
       
       <div className="flex">
         <Sidebar 
-          userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
+          userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
           userName="Sophia Carter"
         />
         
@@ -145,18 +153,27 @@ const MyListings = () => {
           {listings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {listings.map((listing) => (
-                <SpaceCard
-                  key={listing.id}
-                  id={listing.id}
-                  title={listing.title}
-                  location={listing.location}
-                  price={listing.price}
-                  rating={parseFloat(listing.rating)}
-                  reviewCount={listing.reviewCount}
-                  image={listing.image}
-                  showEarnings={true}
-                  totalEarnings={listing.totalEarnings || 0}
-                />
+                <div key={listing.id} className="relative">
+                  <SpaceCard
+                    id={listing.id}
+                    title={listing.title}
+                    location={listing.location}
+                    price={listing.price}
+                    rating={parseFloat(listing.rating)}
+                    reviewCount={listing.reviewCount}
+                    image={listing.image}
+                    showEarnings={true}
+                    totalEarnings={listing.totalEarnings || 0}
+                  />
+                  <Button
+                    onClick={() => handleDeleteListing(listing.id)}
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 bg-white/90 hover:bg-white text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               ))}
             </div>
           ) : (

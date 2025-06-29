@@ -24,7 +24,7 @@ const Header = ({ isLoggedIn = false, onLogin, onLogout, userAvatar, onListSpace
   const navigate = useNavigate();
 
   // Sophia Carter's avatar - updated profile pic
-  const defaultAvatar = "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png";
+  const defaultAvatar = "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png";
 
   const handleListSpace = () => {
     if (onListSpace) {

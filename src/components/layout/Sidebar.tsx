@@ -26,7 +26,7 @@ interface SidebarProps {
 
 const Sidebar = ({ userAvatar, userName = "Sophia Carter" }: SidebarProps) => {
   const location = useLocation();
-  const defaultAvatar = "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png";
+  const defaultAvatar = "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png";
 
   return (
     <div className="w-64 bg-white border-r border-gray-200 min-h-screen">
