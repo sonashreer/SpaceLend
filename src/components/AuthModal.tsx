@@ -1,14 +1,10 @@
 
 import React, { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -17,89 +13,105 @@ interface AuthModalProps {
 }
 
 const AuthModal = ({ isOpen, onClose, onLogin }: AuthModalProps) => {
-  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // For demo purposes, accept any email/password
     onLogin(email, password);
-    onClose();
+    setEmail('');
+    setPassword('');
+  };
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+    onLogin(email, password);
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-white">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
-            {isSignUp ? 'Create Account' : 'Welcome Back'}
-          </DialogTitle>
+          <DialogTitle>Welcome to SpaceLend</DialogTitle>
         </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="mt-1"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              className="mt-1"
-            />
-          </div>
-
-          {isSignUp && (
-            <div>
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your password"
-                required
-                className="mt-1"
-              />
-            </div>
-          )}
-
-          <Button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            {isSignUp ? 'Create Account' : 'Sign In'}
-          </Button>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-blue-600 hover:text-blue-700 text-sm"
-            >
-              {isSignUp 
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"
-              }
-            </button>
-          </div>
-        </form>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          </TabsList>
+          <TabsContent value="login">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Login
+              </Button>
+            </form>
+          </TabsContent>
+          <TabsContent value="signup">
+            <form onSubmit={handleSignup} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signup-email">Email</Label>
+                <Input
+                  id="signup-email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="signup-password">Password</Label>
+                <Input
+                  id="signup-password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirm-password">Confirm Password</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Sign Up
+              </Button>
+            </form>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );
