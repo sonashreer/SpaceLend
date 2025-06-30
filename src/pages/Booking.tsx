@@ -40,18 +40,6 @@ const Booking = () => {
     image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop'
   };
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
-  const handleListSpace = () => {
-    navigate('/list-space');
-  };
-
   const handleCompleteBooking = () => {
     if (!formData.fullName || !formData.email) {
       toast({
@@ -77,12 +65,7 @@ const Booking = () => {
   if (bookingComplete) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <Header 
-          isLoggedIn={isLoggedIn} 
-          onLogin={handleLogin}
-          onLogout={handleLogout}
-          onListSpace={handleListSpace}
-        />
+        <Header isLoggedIn={isLoggedIn} />
         <div className="max-w-2xl mx-auto px-4 py-16 text-center">
           <div className="bg-white rounded-xl shadow-sm p-8">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -100,12 +83,7 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        isLoggedIn={isLoggedIn}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        onListSpace={handleListSpace}
-      />
+      <Header isLoggedIn={isLoggedIn} />
       
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="grid lg:grid-cols-3 gap-8">

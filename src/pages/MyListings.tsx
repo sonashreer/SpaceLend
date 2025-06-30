@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,13 +7,11 @@ import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import SpaceCard from '@/components/SpaceCard';
 import AuthModal from '@/components/AuthModal';
-import { useNavigate } from 'react-router-dom';
 
 const MyListings = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [listings, setListings] = useState<any[]>([]);
-  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -20,10 +19,6 @@ const MyListings = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-  };
-
-  const handleListSpace = () => {
-    navigate('/list-space');
   };
 
   const handleDeleteListing = (listingId: string) => {
@@ -104,7 +99,6 @@ const MyListings = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
-          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -132,7 +126,6 @@ const MyListings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        onListSpace={handleListSpace}
         userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
       />
       

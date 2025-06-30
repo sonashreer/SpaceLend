@@ -1,15 +1,14 @@
+
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Star, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import AuthModal from '@/components/AuthModal';
-import { useNavigate } from 'react-router-dom';
 
 const MyBookings = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -17,10 +16,6 @@ const MyBookings = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-  };
-
-  const handleListSpace = () => {
-    navigate('/list-space');
   };
 
   // Fake bookings data with 5 completed bookings and 1 confirmed
@@ -89,7 +84,6 @@ const MyBookings = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
-          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -117,7 +111,6 @@ const MyBookings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        onListSpace={handleListSpace}
         userAvatar="/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
       />
       

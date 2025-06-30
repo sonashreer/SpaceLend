@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
@@ -5,13 +6,11 @@ import AuthModal from '@/components/AuthModal';
 import { MessageSquare, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useNavigate } from 'react-router-dom';
 
 const Messages = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [newMessage, setNewMessage] = useState('');
-  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -19,10 +18,6 @@ const Messages = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-  };
-
-  const handleListSpace = () => {
-    navigate('/list-space');
   };
 
   const conversations = [
@@ -51,7 +46,6 @@ const Messages = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
-          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -79,7 +73,6 @@ const Messages = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
-        onListSpace={handleListSpace}
       />
       
       <div className="flex">

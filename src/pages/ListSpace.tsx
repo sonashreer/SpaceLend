@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Upload, Car, Home, Building2, Calendar, MapPin, DollarSign, MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,7 +12,6 @@ import { useNavigate } from 'react-router-dom';
 
 const ListSpace = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [formData, setFormData] = useState({
     spaceType: '',
     title: '',
@@ -22,18 +22,6 @@ const ListSpace = () => {
     availableDates: {from: undefined, to: undefined} as {from: Date | undefined, to: Date | undefined}
   });
   const navigate = useNavigate();
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
-  const handleListSpace = () => {
-    // Already on list space page
-  };
 
   const spaceTypes = [
     { value: 'driveway', label: 'Driveway', icon: Car },
@@ -113,12 +101,7 @@ const ListSpace = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        isLoggedIn={isLoggedIn}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        onListSpace={handleListSpace}
-      />
+      <Header />
       
       <div className="max-w-2xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         {/* Progress Indicator */}

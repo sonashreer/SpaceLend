@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Map, List as ListIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,11 +12,10 @@ import {
 } from '@/components/ui/select';
 import Header from '@/components/layout/Header';
 import SpaceCard from '@/components/SpaceCard';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 const Explore = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState(searchParams.get('location') || '');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [priceFilter, setPriceFilter] = useState('all');
@@ -27,22 +27,6 @@ const Explore = () => {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem('userLoggedIn', 'true');
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('userLoggedIn');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userName');
-  };
-
-  const handleListSpace = () => {
-    navigate('/list-space');
-  };
 
   // Extended mock listings - 10 total
   const mockListings = [
@@ -227,13 +211,19 @@ const Explore = () => {
     }
   };
 
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    localStorage.removeItem('userLoggedIn');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userName');
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
         isLoggedIn={isLoggedIn}
-        onLogin={handleLogin}
         onLogout={handleLogout}
-        onListSpace={handleListSpace}
+        userEmail={isLoggedIn ? 'sophia.carter@example.com' : undefined}
         userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
       />
       
