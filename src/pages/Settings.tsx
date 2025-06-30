@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
@@ -7,10 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -20,6 +21,10 @@ const Settings = () => {
     setIsLoggedIn(false);
   };
 
+  const handleListSpace = () => {
+    navigate('/list-space');
+  };
+
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -27,6 +32,7 @@ const Settings = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
+          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -54,6 +60,7 @@ const Settings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        onListSpace={handleListSpace}
       />
       
       <div className="flex">

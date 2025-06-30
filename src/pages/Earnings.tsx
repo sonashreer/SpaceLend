@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import AuthModal from '@/components/AuthModal';
 import { DollarSign, TrendingUp, Calendar } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Earnings = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -15,6 +16,10 @@ const Earnings = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+  };
+
+  const handleListSpace = () => {
+    navigate('/list-space');
   };
 
   const earningsSummary = {
@@ -38,6 +43,7 @@ const Earnings = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
+          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -65,6 +71,7 @@ const Earnings = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        onListSpace={handleListSpace}
       />
       
       <div className="flex">

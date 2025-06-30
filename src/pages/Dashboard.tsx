@@ -1,13 +1,14 @@
-
 import React, { useState } from 'react';
 import { DollarSign, Calendar, MessageSquare, TrendingUp } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Sidebar from '@/components/layout/Sidebar';
 import AuthModal from '@/components/AuthModal';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Set to true to show logged in state
+  const navigate = useNavigate();
 
   const handleLogin = (email: string, password: string) => {
     setIsLoggedIn(true);
@@ -15,6 +16,10 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
+  };
+
+  const handleListSpace = () => {
+    navigate('/list-space');
   };
 
   const dashboardStats = [
@@ -37,6 +42,7 @@ const Dashboard = () => {
           isLoggedIn={isLoggedIn}
           onLogin={() => setIsAuthModalOpen(true)}
           onLogout={handleLogout}
+          onListSpace={handleListSpace}
         />
         <div className="flex items-center justify-center min-h-[80vh]">
           <div className="text-center">
@@ -64,6 +70,7 @@ const Dashboard = () => {
         isLoggedIn={isLoggedIn}
         onLogin={() => setIsAuthModalOpen(true)}
         onLogout={handleLogout}
+        onListSpace={handleListSpace}
         userAvatar="/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
       />
       
