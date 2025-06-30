@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Search, ArrowRight, Star, Shield, Clock, DollarSign, MapPin, Users, CheckCircle, MessageCircle, Calendar, Phone, Mail, MapIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -348,7 +347,7 @@ const Index = () => {
                 role: "Space Owner",
                 rating: 5,
                 comment: "I've been earning $600+ monthly from my garage space. SpaceLend made it so easy to get started!",
-                avatar: "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
+                avatar: "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
               },
               {
                 name: "Mike Chen",
@@ -362,7 +361,7 @@ const Index = () => {
                 role: "Small Business Owner",
                 rating: 5,
                 comment: "Found the perfect warehouse space for my inventory. SpaceLend saved me thousands compared to traditional storage.",
-                avatar: "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png"
+                avatar: "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png"
               }
             ].map((review, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-md">

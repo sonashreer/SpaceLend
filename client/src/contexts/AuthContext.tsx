@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface AuthContextType {
@@ -20,7 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   
   // Use consistent Sophia Carter profile across the platform
-  const userAvatar = "/lovable-uploads/956d7f44-6ece-45ac-9ecb-ee85bc5555d3.png";
+  const userAvatar = "/lovable-uploads/43608ed6-2ced-42a2-89da-0612cfd5766f.png";
   const userName = "Sophia Carter";
 
   // Check localStorage on app load to maintain persistent login
