@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Calendar, User, Wifi, Car } from 'lucide-react';
@@ -93,6 +92,10 @@ const SpaceDetail = () => {
     localStorage.setItem('userName', 'Sophia Carter');
   };
 
+  const handleListSpace = () => {
+    navigate('/list-space');
+  };
+
   const handleBooking = () => {
     if (!isLoggedIn) {
       setIsAuthModalOpen(true);
@@ -136,6 +139,7 @@ const SpaceDetail = () => {
           localStorage.removeItem('userEmail');
           localStorage.removeItem('userName');
         }}
+        onListSpace={handleListSpace}
         userAvatar={isLoggedIn ? 'https://images.unsplash.com/photo-1494790108755-2616b332c1b5?w=50&h=50&fit=crop&crop=face' : undefined}
       />
       
